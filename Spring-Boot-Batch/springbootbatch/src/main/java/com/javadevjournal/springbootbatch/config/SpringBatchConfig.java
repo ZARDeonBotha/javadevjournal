@@ -13,14 +13,17 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
+import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
 import org.springframework.batch.item.file.transform.PassThroughLineAggregator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 
 /**
  * @Author - Kunwar Vikas
@@ -33,6 +36,19 @@ public class SpringBatchConfig {
 
 	@Autowired
 	public StepBuilderFactory stepBuilderFactory;
+
+	@Value("classpath*:/csv/stockinfo*.csv")
+	private Resource[] inputFiles;
+
+	@Bean
+	public MultiResourceItemReader<StockInfo> multiResourceItemReader() {
+		MultiResourceItemReader<StockInfo> reader = new MultiResourceItemReader<>();
+
+		reader.setDelegate(reader());
+		reader.setResources(inputFiles);
+
+		return reader;
+	}
 
 	@Bean
 	public Job processJob() {
@@ -49,7 +65,7 @@ public class SpringBatchConfig {
         return stepBuilderFactory.get("step1")
                 .listener(new SpringBatchStepListener())
                 .<StockInfo, String>chunk(10)
-                .reader(reader())
+                .reader(multiResourceItemReader())
                 .processor(stockInfoProcessor())
                 .writer(writer())
                 .faultTolerant()
@@ -62,7 +78,6 @@ public class SpringBatchConfig {
     public FlatFileItemReader<StockInfo> reader() {
         return new FlatFileItemReaderBuilder<StockInfo>()
                 .name("stockInfoItemReader")
-                .resource(new ClassPathResource("csv/stockinfo.csv"))
                 .delimited()
                 .names(new String[] {"stockId", "stockName","stockPrice","yearlyHigh","yearlyLow","address","sector","market"})
                 .targetType(StockInfo.class)
