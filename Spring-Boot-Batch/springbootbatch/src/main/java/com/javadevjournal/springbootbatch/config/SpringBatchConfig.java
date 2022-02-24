@@ -3,8 +3,8 @@ package com.javadevjournal.springbootbatch.config;
 import com.javadevjournal.springbootbatch.listener.SpringBatchJobCompletionListener;
 import com.javadevjournal.springbootbatch.listener.SpringBatchJobExecutionListener;
 import com.javadevjournal.springbootbatch.listener.SpringBatchStepListener;
-import com.javadevjournal.springbootbatch.model.StockInfo;
-import com.javadevjournal.springbootbatch.step.StockInfoProcessor;
+import com.javadevjournal.springbootbatch.model.LogLineRecord;
+import com.javadevjournal.springbootbatch.step.LogLineRecordProcessor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
@@ -40,8 +40,8 @@ public class SpringBatchConfig {
 	private Resource[] inputFiles;
 
 	@Bean
-	public MultiResourceItemReader<StockInfo> multiResourceItemReader() {
-		MultiResourceItemReader<StockInfo> reader = new MultiResourceItemReader<>();
+	public MultiResourceItemReader<LogLineRecord> multiResourceItemReader() {
+		MultiResourceItemReader<LogLineRecord> reader = new MultiResourceItemReader<>();
 
 		reader.setDelegate(reader());
 		reader.setResources(inputFiles);
@@ -54,16 +54,16 @@ public class SpringBatchConfig {
 		return jobBuilderFactory.get("stockpricesinfojob")
 				.incrementer(new RunIdIncrementer())
 				.listener(new SpringBatchJobExecutionListener())
-				.flow(StockPricesInfoStep())
+				.flow(LogLineRecordStep())
                 .end()
                 .build();
 	}
 
     @Bean
-    public Step StockPricesInfoStep() {
+    public Step LogLineRecordStep() {
         return stepBuilderFactory.get("step1")
                 .listener(new SpringBatchStepListener())
-                .<StockInfo, String>chunk(10)
+                .<LogLineRecord, String>chunk(10)
                 .reader(multiResourceItemReader())
                 .processor(stockInfoProcessor())
                 .writer(writer())
@@ -74,18 +74,19 @@ public class SpringBatchConfig {
     }
 
     @Bean
-    public FlatFileItemReader<StockInfo> reader() {
-        return new FlatFileItemReaderBuilder<StockInfo>()
-                .name("stockInfoItemReader")
+    public FlatFileItemReader<LogLineRecord> reader() {
+        return new FlatFileItemReaderBuilder<LogLineRecord>()
+                .name("logLineRecordReader")
                 .delimited()
-                .names(new String[] {"stockId", "stockName","stockPrice","yearlyHigh","yearlyLow","address","sector","market"})
-                .targetType(StockInfo.class)
+                //.names(new String[] {"stockId", "stockName","stockPrice","yearlyHigh","yearlyLow","address","sector","market"})
+				.names(new String[] {"logRecord"})
+				.targetType(LogLineRecord.class)
                 .build();
     }
 
     @Bean
-    public StockInfoProcessor stockInfoProcessor(){
-	    return new StockInfoProcessor();
+    public LogLineRecordProcessor stockInfoProcessor(){
+	    return new LogLineRecordProcessor();
     }
 
     @Bean

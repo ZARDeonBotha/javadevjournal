@@ -11,10 +11,7 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 /**
  * @Author - Kunwar Vikas
@@ -26,7 +23,7 @@ public class SpringBatchJobController {
     JobLauncher jobLauncher;
  
     @Autowired
-    Job stockpricesinfojob;
+    Job logLineReaderJob;
 
     /**
      * Invoke the batch job on-demand using rest APIs.
@@ -37,7 +34,7 @@ public class SpringBatchJobController {
     public String invokeBatchJob() throws Exception {
              JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
                     .toJobParameters();
-            jobLauncher.run(stockpricesinfojob, jobParameters);
+            jobLauncher.run(logLineReaderJob, jobParameters);
          return "Batch job has been invoked";
     }
 
@@ -53,7 +50,7 @@ public class SpringBatchJobController {
     public String schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
                 .toJobParameters();
-        jobLauncher.run(stockpricesinfojob, jobParameters);
+        jobLauncher.run(logLineReaderJob, jobParameters);
         return "Batch job has been invoked";
     }
 }

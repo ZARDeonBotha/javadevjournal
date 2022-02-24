@@ -4,13 +4,14 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class StockInfo {
-    private String stockId;
+public class LogLineRecord {
+    private String logRecord;
+    /*private String record;
     private String stockName;
     private double stockPrice;
     private double yearlyHigh;
     private double yearlyLow;
     private String address;
     private String sector;
-    private String market;
+    private String market;*/
 }
