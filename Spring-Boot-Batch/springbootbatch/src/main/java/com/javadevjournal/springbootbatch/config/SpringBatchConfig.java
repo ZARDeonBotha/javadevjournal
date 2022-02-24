@@ -51,7 +51,7 @@ public class SpringBatchConfig {
 
 	@Bean
 	public Job processJob() {
-		return jobBuilderFactory.get("stockpricesinfojob")
+		return jobBuilderFactory.get("logLineReaderjob")
 				.incrementer(new RunIdIncrementer())
 				.listener(new SpringBatchJobExecutionListener())
 				.flow(LogLineRecordStep())
