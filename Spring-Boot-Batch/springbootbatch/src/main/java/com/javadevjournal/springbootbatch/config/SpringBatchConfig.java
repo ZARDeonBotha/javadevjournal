@@ -25,7 +25,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 /**
- * @Author - Kunwar Vikas
+ * @Author - Kunwar Vikas,  D. Botha
  */
 @Configuration
 public class SpringBatchConfig {

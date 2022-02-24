@@ -7,7 +7,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
 
 /**
- * @Author - Kunwar Vikas
+ * @Author - Kunwar Vikas,  D. Botha
  */
 public class SpringBatchJobExecutionListener implements JobExecutionListener {
 

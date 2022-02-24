@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 /**
  * currently not in use, we are using H2 DB
- * @Author - Kunwar Vikas
+ * @Author - Kunwar Vikas,  D. Botha
  */
 public class SpringBatchBasicRepository implements BatchConfigurer {
 

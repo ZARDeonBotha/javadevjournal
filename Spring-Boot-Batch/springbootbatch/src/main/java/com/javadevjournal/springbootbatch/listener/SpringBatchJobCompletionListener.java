@@ -7,7 +7,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.listener.JobExecutionListenerSupport;
 
 /**
- * @Author - Kunwar Vikas
+ * @Author - Kunwar Vikas,  D. Botha
  */
 public class SpringBatchJobCompletionListener extends JobExecutionListenerSupport {
 	Logger logger = LoggerFactory.getLogger(SpringBatchJobCompletionListener.class);
