@@ -1,7 +1,6 @@
 package com.javadevjournal.springbootbatch.model;
 
 import lombok.Data;
-import java.util.List;
 
 @Data
 public class LogLineRecord {
